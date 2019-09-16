@@ -10,52 +10,60 @@ let getCoinOrder = 0;  // 0获取三个币种全部买卖单 1，2，3 获取对
 // 只返回买一卖一
 let fetchOrderBook = async (coin) => {
     // 如果报错 则重新获取数据 超过10次 全部数据重新获取
-    try
-    {
-//在此运行代码
+    try {
+        let orderBook = await exchange.fetchOrderBook(coin);
+        return {
+            'bids': orderBook['bids'][0],
+            'asks': orderBook['asks'][0]
+        }
     }
-    catch(err)
-    {
-//在此处理错误
+    catch(err) {
+        console.log('数据获取失败.')
     }
-    let orderBook = await exchange.fetchOrderBook(coin);
-    return {
-        'bids': orderBook['bids'][0],
-        'asks': orderBook['asks'][0]
-    }
+
 }
 
 (async function main () {
     let coinAOrderBook,coinBOrderBook,coinCOrderBook;
     let book = {}
-    //无限循环
+    //无限循环 循环获取值
     while (1===1){
-        if(getCoinOrder === 0){  // 
+        if(getCoinOrder === 0){  //
             coinAOrderBook = await fetchOrderBook(config.coinA);
             coinBOrderBook = await fetchOrderBook(config.coinB);
             coinCOrderBook = await fetchOrderBook(config.coinC);
-            console.log(getCoinOrder)
             getCoinOrder += 1
         }else {
             if(getCoinOrder===1){
                 coinAOrderBook = await fetchOrderBook(config.coinA)
-                console.log(getCoinOrder)
             }
             if(getCoinOrder===2){
                 coinBOrderBook = await fetchOrderBook(config.coinB)
-                console.log(getCoinOrder)
             }
             if(getCoinOrder===3){
                 coinCOrderBook = await fetchOrderBook(config.coinC);
-                console.log(getCoinOrder)
-                getCoinOrder = 0  // 等于3 重新变成1 后面会 +1 
+                getCoinOrder = 0  // 等于3 重新变成1 后面会 +1
             }
             getCoinOrder += 1
         }
 
-        // console.log(coinAOrderBook)
-        // console.log(coinBOrderBook)
-        // console.log(coinCOrderBook)
+        // 计算能否套利
+        if(coinAOrderBook&&coinBOrderBook&&coinCOrderBook){ //可能获取失败 判断是否有值
+            // A / B = C    1.卖A 买B 买c  2.买A 卖B 卖C
+            // let result1 = coinAOrderBook['asks'][0] * (1 - config.fee)
+            //     / coinBOrderBook['bids'][0] * (1 - config.fee)
+            //     / coinCOrderBook['bids'][0] * (1 - config.fee)
+            // if(
+            //     (coinAOrderBook['asks'][0]/coinBOrderBook['bids'][0]-coinCOrderBook['bids'][0])/coinCOrderBook['bids'][0]
+            //     > (config.coinAPremium+config.coinBPremium+config.coinCPremium+config.fee*3)){
+            //
+            // }
+            // console.log('方式1   差价：'+(coinAOrderBook['bids'][0]/coinBOrderBook['asks'][0]-coinCOrderBook['asks'][0])/coinCOrderBook['bids'][0] + '手续费：'+(config.coinAPremium+config.coinBPremium+config.coinCPremium+config.fee*3))
+
+
+            console.log('方式2   差价：'+(coinAOrderBook['asks'][0]/coinBOrderBook['bids'][0]-coinCOrderBook['bids'][0])/coinCOrderBook['bids'][0]+'手续费：'+(config.coinAPremium+config.coinBPremium+config.coinCPremium+config.fee*3))
+            console.log(`假如10000个btc,  -- ${10000/coinAOrderBook['asks'][0]}`)
+        }
     }
-    
+
 })()
