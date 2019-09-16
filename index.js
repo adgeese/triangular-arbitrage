@@ -12,9 +12,10 @@ let fetchOrderBook = async (coin) => {
     // 如果报错 则重新获取数据 超过10次 全部数据重新获取
     try {
         let orderBook = await exchange.fetchOrderBook(coin);
+        // console.log(orderBook)
         return {
-            'bids': orderBook['bids'][0],
-            'asks': orderBook['asks'][0]
+            'bids': orderBook['bids'][0],   // 10153
+            'asks': orderBook['asks'][0]    // 10157
         }
     }
     catch(err) {
@@ -61,8 +62,19 @@ let fetchOrderBook = async (coin) => {
             // console.log('方式1   差价：'+(coinAOrderBook['bids'][0]/coinBOrderBook['asks'][0]-coinCOrderBook['asks'][0])/coinCOrderBook['bids'][0] + '手续费：'+(config.coinAPremium+config.coinBPremium+config.coinCPremium+config.fee*3))
 
 
-            console.log('方式2   差价：'+(coinAOrderBook['asks'][0]/coinBOrderBook['bids'][0]-coinCOrderBook['bids'][0])/coinCOrderBook['bids'][0]+'手续费：'+(config.coinAPremium+config.coinBPremium+config.coinCPremium+config.fee*3))
-            console.log(`假如10000个btc,  -- ${10000/coinAOrderBook['asks'][0]}`)
+            // console.log('方式2   差价：'+(coinAOrderBook['bids'][0]/coinBOrderBook['asks'][0]-coinCOrderBook['asks'][0])/coinCOrderBook['asks'][0]+'手续费：'+(config.coinAPremium+config.coinBPremium+config.coinCPremium+config.fee*3))
+            let UtoB = 10000 / coinCOrderBook['asks'][0] * (1-config.fee)
+            let BtoD = UtoB * coinAOrderBook['bids'][0] * (1-config.fee)
+            let DtoU = BtoD / coinBOrderBook['asks'][0] * (1-config.fee)
+
+            let DtoB = 10000 / coinAOrderBook['asks'][0] * (1-config.fee)
+            let BtoU = DtoB * coinCOrderBook['bids'][0] * (1-config.fee)
+            let UtoD = BtoU * coinBOrderBook['bids'][0] * (1-config.fee)
+
+
+            if(DtoU > 10000 || UtoD > 10000){
+                console.log(1111111)
+            }
         }
     }
 
