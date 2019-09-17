@@ -59,18 +59,18 @@ let fetchOrderBook = async (coin) => {
             //     > (config.coinAPremium+config.coinBPremium+config.coinCPremium+config.fee*3)){
             //
             // }
-            // console.log('方式1   差价：'+(coinAOrderBook['bids'][0]/coinBOrderBook['asks'][0]-coinCOrderBook['asks'][0])/coinCOrderBook['bids'][0] + '手续费：'+(config.coinAPremium+config.coinBPremium+config.coinCPremium+config.fee*3))
+            // console.log('方式1   差价：'+(coinAOrderBook['bids'][0]/coinBOrderBook['asks'][0]-coinCOrderBook['asks'][0])/coinCOrderBook['asks'][0] + '手续费：'+(config.coinAPremium+config.coinBPremium+config.coinCPremium+config.fee*3))
 
 
             // console.log('方式2   差价：'+(coinAOrderBook['bids'][0]/coinBOrderBook['asks'][0]-coinCOrderBook['asks'][0])/coinCOrderBook['asks'][0]+'手续费：'+(config.coinAPremium+config.coinBPremium+config.coinCPremium+config.fee*3))
             let UtoB = 10000 / coinCOrderBook['asks'][0] * (1-config.fee)
             let BtoD = UtoB * coinAOrderBook['bids'][0] * (1-config.fee)
             let DtoU = BtoD / coinBOrderBook['asks'][0] * (1-config.fee)
-
+            console.log(DtoU)
             let DtoB = 10000 / coinAOrderBook['asks'][0] * (1-config.fee)
             let BtoU = DtoB * coinCOrderBook['bids'][0] * (1-config.fee)
             let UtoD = BtoU * coinBOrderBook['bids'][0] * (1-config.fee)
-
+            console.log(UtoD)
 
             if(DtoU > 10000 || UtoD > 10000){
                 console.log(1111111)

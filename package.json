@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/yangfan1995725/triangular-arbitrage#readme",
   "dependencies": {
-    "ccxt": "^1.18.1123"
+    "ccxt": "^1.18.1123",
+    "http": "0.0.0"
   }
 }
