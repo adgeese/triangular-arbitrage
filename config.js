@@ -12,9 +12,9 @@ config.TradeThreshold = 1.0006
 // config.coinB = 'USDT/DKKT'
 // config.coinC = 'BTC/USDT'
 
-config.coinA = 'BZ/DKKT'  //   A / B = C    1.卖A 买B 买c  2.买A 卖B 卖C
-config.coinB = 'USDT/DKKT'
-config.coinC = 'BZ/USDT'
+config.coinA = 'HPB/BTC'  //   A / B = C    1.卖A 买B 买c  2.买A 卖B 卖C
+config.coinB = 'ETH/BTC'
+config.coinC = 'HPB/ETH'
 // 溢价
 config.coinAPremium = 0.0001
 config.coinBPremium = 0.0001
